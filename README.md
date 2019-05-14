@@ -28,7 +28,7 @@ public class TestExample {
 
     @Test
     public void test(){
-        LocalDate localDate = UnitMock.buildFor(MyClass.class);
+        MyClass myInstance = UnitMock.buildFor(MyClass.class);
     }
     
     /**
@@ -36,7 +36,7 @@ public class TestExample {
     */
     @Test
     public void testInDepth(){
-        LocalDate localDate = UnitMock.buildFor(MyClass.class, 10);
+        MyClass myInstance = UnitMock.buildFor(MyClass.class, 10);
     }
     
 }
