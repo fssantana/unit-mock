@@ -60,3 +60,12 @@ public class TestExample {
     }
 }
 ```
+
+* Add as maven dependency
+```xml
+<dependency>
+  <groupId>io.github.fssantana</groupId>
+  <artifactId>unit-mock</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
