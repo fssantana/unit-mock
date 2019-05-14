@@ -41,3 +41,22 @@ public class TestExample {
     
 }
 ```
+
+* You can mock incremental integer (like a relational database)
+```java
+public class TestExample {
+    
+    @Test
+    public void integerSequenceTest(){
+    UnitMockIntegerSequence sequence = UnitMockIntegerSequence
+                    .init()
+                    .startWith(0)
+                    .incrementStep(2)
+                    .build();
+    
+            Integer firstId = sequence.next();   //0
+            Integer secondId = sequence.next();  //2
+            Integer thirdId = sequence.next();   //4
+    }
+}
+```
