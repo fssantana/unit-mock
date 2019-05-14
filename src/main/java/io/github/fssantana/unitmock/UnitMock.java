@@ -185,17 +185,28 @@ public class UnitMock {
         return alphabetic(amount) + domain;
     }
 
-	public static <T> T buildFor(Class<T> clazz, int level) throws Exception {
-		T instance = clazz.newInstance();
-		for (Field field : clazz.getDeclaredFields()) {
+	public static <T> T buildFor(Class<T> clazz, int level) throws RuntimeException {
+        T instance = null;
+        try {
+            instance = clazz.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        for (Field field : clazz.getDeclaredFields()) {
 			if (!Modifier.isStatic(field.getModifiers())) {
 				try {
 					field.setAccessible(true);
 					Object value = getValue(field, level);
 					field.set(instance, value);
 				} catch (Exception e) {
-					field.set(instance, null);
-				}
+                    try {
+                        field.set(instance, null);
+                    } catch (IllegalAccessException e1) {
+                        throw new RuntimeException(e);
+                    }
+                }
 			}
 		}
 
@@ -207,8 +218,12 @@ public class UnitMock {
 						Object value = getValue(field, level);
 						field.set(instance, value);
 					} catch (Exception e) {
-						field.set(instance, null);
-					}
+                        try {
+                            field.set(instance, null);
+                        } catch (IllegalAccessException e1) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 				}
 			}
 		}
@@ -216,12 +231,12 @@ public class UnitMock {
 		return instance;
 	}
 
-	private static Object getValue(Field field, int level) throws Exception {
+	private static Object getValue(Field field, int level) {
 		Class<?> type = field.getType();
 		return getValue(type, field, level);
 	}
 
-	private static Object getValue(Class<?> type, Field field, int level) throws Exception {
+	private static Object getValue(Class<?> type, Field field, int level) {
 		if (type.isEnum()) {
 			Object[] enumValues = type.getEnumConstants();
 			return enumValues[random().nextInt(enumValues.length)];
@@ -284,7 +299,7 @@ public class UnitMock {
 		return null;
 	}
 
-	public static <T> T buildFor(Class<T> clazz) throws Exception {
+	public static <T> T buildFor(Class<T> clazz) {
 		return buildFor(clazz, 0);
 	}
 
